@@ -56,7 +56,6 @@ private object CombiningValidators extends App {
 
   lazy val semigroupK: SemigroupK[Validator] = new SemigroupK[Validator]:
     override def combineK[A](v1: Validator[A], v2: Validator[A]): Validator[A] =
-      given Semigroup[A] = (x: A, _: A) => x
       (x: A) => SemigroupK[ErrorOr].combineK(v1.validate(x), v2.validate(x))
 
   // we are interested in planets with diameter between Mercury's and Earth's
@@ -85,8 +84,6 @@ private object CombiningValidators extends App {
       diameterUpperBoundValidator
     )
 
-
-
   // accumulative error validator
   lazy val diameterValidator3: Validator[Double] = (x: Double) =>
     Apply[ErrorOr].productL(
@@ -104,11 +101,15 @@ private object CombiningValidators extends App {
     )
 
   // testing:
-  planetValidator.validate(
-    Planet("", 1.0)
+  println(
+    planetValidator.validate(
+      Planet("", 1.0)
+    )
   ) // Invalid(Chain(string cannot be empty, [1.0]: Value cannot be lower than 4878.0))
-  planetValidator.validate(
-    Planet("Proxima b", 12000)
+  println(
+    planetValidator.validate(
+      Planet("Proxima b", 12000)
+    )
   ) // Valid(Planet(Proxima b,12000.0))
 
 }
