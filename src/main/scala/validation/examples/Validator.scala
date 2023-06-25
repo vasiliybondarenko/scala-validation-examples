@@ -6,7 +6,7 @@ import validation.examples.Validator.ErrorsOr
 
 import scala.deriving.Mirror
 
-private object Validator:
+object Validator:
   type ErrorsOr[A] = ValidatedNec[String, A]
 
   inline def derived[A](using m: Mirror.ProductOf[A]): Validator[A] =

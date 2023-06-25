@@ -2,14 +2,17 @@ package validation.examples
 
 import cats.data.{NonEmptyChain, Validated}
 import cats.data.Validated.*
+
 private object ValidatingWithDerived extends App:
   case class Planet(name: String, diameter: Double, distanceToHostStar: Long)
-      derives Validator
+  // derives Validator
+
+  val validator = Validator.derived[Planet]
 
   val validPlanet = Planet("Earth", 13000.0, 150000000000L)
   val invalidPlanet = Planet("SomePlanetWithLongName", 13000.0, 100000L)
 
-  val validator = summon[Validator[Planet]]
+  // val validator = summon[Validator[Planet]]
 
   println(validator.validate(validPlanet))
   println(validator.validate(invalidPlanet))
